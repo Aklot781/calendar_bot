@@ -1,5 +1,7 @@
 # Telegram-бот для уведомлений о встречах из Google Calendar
 
+@calendar_reminder_pdp_bot
+
 ## 1. Описание проекта
 
 Данный проект представляет собой Telegram-бота, который подключается к Google Calendar пользователя и:
