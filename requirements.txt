@@ -1,0 +1,6 @@
+aiogram==3.*
+python-dotenv
+google-api-python-client
+google-auth
+google-auth-oauthlib
+apscheduler

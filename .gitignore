@@ -1,0 +1,16 @@
+# Virtual environment
+venv/
+.env
+
+# Database
+database.db
+
+# Google credentials
+credentials.json
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Logs
+bot.log
