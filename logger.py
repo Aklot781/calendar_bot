@@ -1,6 +1,6 @@
 import logging
 
-# Базовая настройка логирования
+# Настройка логирования
 logging.basicConfig(
     level=logging.INFO,  # Логируем INFO и выше (WARNING, ERROR, CRITICAL)
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",

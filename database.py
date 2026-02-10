@@ -64,7 +64,7 @@ def get_reminder(user_id: int):
     return row[0] if row else 15
 
 
-# ---------- Таблица отправленных уведомлений ----------
+# Таблица отправленных уведомлений
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS notified_events (
     user_id INTEGER,
@@ -93,7 +93,7 @@ def mark_event_notified(user_id: int, event_id: str):
     conn.commit()
 
 
-# ---------- Таблица истории встреч ----------
+# Таблица истории встреч
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS events_history (
     user_id INTEGER,

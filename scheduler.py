@@ -6,11 +6,7 @@ from dateutil import parser
 
 # Google Calendar API
 from googleapiclient.discovery import build
-
-# Логгер
 from logger import logger
-
-# Работа с базой данных
 from database import (
     get_token,
     get_reminder,
@@ -19,15 +15,13 @@ from database import (
     save_event_history,
     is_event_in_history
 )
-
-# Авторизация Google Calendar
 from google_calendar import authorize
 
 
-# ---------- Google Calendar ----------
+# Google Calendar
 def get_events(creds, time_min=None, time_max=None, max_results=20):
 
-   # Получение списка событий Google Calendar за указанный период времени.
+   # Получение списка событий Google Calendar за указанный период времени
 
     service = build("calendar", "v3", credentials=creds)
 
@@ -43,7 +37,7 @@ def get_events(creds, time_min=None, time_max=None, max_results=20):
     return events.get("items", [])
 
 
-# ---------- Основная задача планировщика ----------
+# Основная задача
 async def check_events(bot):
     
     from database import cursor
@@ -54,7 +48,7 @@ async def check_events(bot):
     cursor.execute("SELECT user_id FROM users")
     users = cursor.fetchall()
 
-    # Текущее время в UTC (для корректных сравнений)
+    # Текущее время в UTC
     now = datetime.now(timezone.utc)
 
     for (user_id,) in users:
@@ -83,7 +77,7 @@ async def check_events(bot):
             start_str = event.get("start", {}).get("dateTime")
             end_str = event.get("end", {}).get("dateTime")
 
-            # Пропускаем некорректные события (all-day и т.п.)
+            # Пропускаем некорректные события
             if not event_id or not start_str or not end_str:
                 continue
 
@@ -91,7 +85,7 @@ async def check_events(bot):
             start_time = parser.isoparse(start_str)
             end_time = parser.isoparse(end_str)
 
-            # ---------- 1. УВЕДОМЛЕНИЕ ----------
+            # УВЕДОМЛЕНИЕ
             delta = start_time - now
 
             # Проверяем что событие скоро начнётся и пользователь ещё не получал уведомление
@@ -118,7 +112,7 @@ async def check_events(bot):
                 # Помечаем событие как уведомлённое
                 mark_event_notified(user_id, event_id)
 
-            # ---------- 2. ИСТОРИЯ (ПОСЛЕ ЗАВЕРШЕНИЯ) ----------
+            # ИСТОРИЯ
             # Добавляем событие в историю только после его окончания
             if end_time < now:
                 local_end = end_time.astimezone()
@@ -138,7 +132,7 @@ async def check_events(bot):
                     )
 
 
-# ---------- Планировщик ----------
+# Планировщик
 def start_scheduler(bot):
 
     # Запуск APScheduler для периодической проверки событий.
