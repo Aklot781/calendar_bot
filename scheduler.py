@@ -85,7 +85,7 @@ async def check_events(bot):
             start_time = parser.isoparse(start_str)
             end_time = parser.isoparse(end_str)
 
-            # УВЕДОМЛЕНИЕ
+            # Уведомление
             delta = start_time - now
 
             # Проверяем что событие скоро начнётся и пользователь ещё не получал уведомление
@@ -112,7 +112,7 @@ async def check_events(bot):
                 # Помечаем событие как уведомлённое
                 mark_event_notified(user_id, event_id)
 
-            # ИСТОРИЯ
+            # История
             # Добавляем событие в историю только после его окончания
             if end_time < now:
                 local_end = end_time.astimezone()

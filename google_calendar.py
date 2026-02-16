@@ -5,7 +5,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 
-# Область доступа (scope)
+# Область доступа
 # readonly — только чтение событий календаря
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
@@ -27,7 +27,7 @@ def authorize(user_token: str | None):
         SCOPES
     )
 
-    # Открывается локальный сервер и браузер для входа в Google
+    # Открывается локальный сервер и браузер для входа в гугл
     creds = flow.run_local_server(port=0)
 
     return creds

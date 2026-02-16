@@ -5,7 +5,7 @@ from logger import logger
 conn = sqlite3.connect("database.db")
 cursor = conn.cursor()
 
-# ---------- Таблица пользователей ----------
+#аблица пользователей
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS users (
     user_id INTEGER PRIMARY KEY,
@@ -76,7 +76,7 @@ conn.commit()
 
 
 def is_event_notified(user_id: int, event_id: str) -> bool:
-    # Проверка: отправлялось ли уведомление
+    # Проверка отправлялось ли уведомление
     cursor.execute(
         "SELECT 1 FROM notified_events WHERE user_id = ? AND event_id = ?",
         (user_id, event_id)
@@ -107,7 +107,7 @@ conn.commit()
 
 
 def save_event_history(user_id: int, event_id: str, event_time: str, summary: str):
-    # Сохранение завершённого события
+
     cursor.execute(
         """
         INSERT OR IGNORE INTO events_history
@@ -118,16 +118,18 @@ def save_event_history(user_id: int, event_id: str, event_time: str, summary: st
     )
     conn.commit()
 
-    # Храним только последние 10 событий
+    # Удаляем лишние записи текущего пользователя
     cursor.execute("""
         DELETE FROM events_history
-        WHERE rowid NOT IN (
+        WHERE user_id = ?
+        AND rowid NOT IN (
             SELECT rowid FROM events_history
             WHERE user_id = ?
             ORDER BY event_time DESC
             LIMIT 10
         )
-    """, (user_id,))
+    """, (user_id, user_id))
+
     conn.commit()
 
     logger.info(
